@@ -46,6 +46,7 @@ class Schedule:
         for i, event in enumerate(self._all_events):
             if event.frequency_of_weeks == 1:
                 self._even_week.append(event)
+                self._even_week[-1].start_date += timedelta(days=7)
                 self._odd_week.append(event)
             elif (event.start_date - self.first_day).days < 7:
                 self._odd_week.append(event)
@@ -57,6 +58,17 @@ class Schedule:
         print(len(events or self._all_events))
         for event in events or self._all_events:
             print(event)
+
+    def get_schedule_by_date(self, given_date: date) -> list[ScheduleEvent]:
+        if ((given_date - self.first_day).days // 7 + 1) % 2:
+            return [event for event in self._odd_week if (event.start_date - given_date).days % 7 == 0]
+        return [event for event in self._even_week if (event.start_date - given_date).days % 7 == 0]
+
+    def get_schedule_for_today(self) -> list[ScheduleEvent]:
+        return self.get_schedule_by_date(datetime.today().date())
+
+    def get_schedule_for_tomorrow(self) -> list[ScheduleEvent]:
+        return self.get_schedule_by_date(datetime.today().date() + timedelta(days=1))
 
     def get_teacher(self, name: str) -> Teacher | None:
         name = name.lower().strip()
