@@ -21,7 +21,7 @@ class Teacher:
                         self.photo = None
 
                     return
-        raise KeyError(f'No such teacher: {self.name}')
+        self.name = name.strip()
 
     def __str__(self):
         return f'name: {self.name}\nphoto: {self.photo}\nlink: {self.link}'
@@ -31,11 +31,7 @@ class Teacher:
 
 
 def split_name(name: str) -> list[str]:
-    to_replace = []
-    for l in name.lower():
-        if not l.isalpha():
-            to_replace.append(l)
-    for l in to_replace:
+    for l in [l for l in name.lower() if not l.isalpha()]:
         name = name.replace(l, ' ')
     while '  ' in name:
         name = name.replace('  ', ' ')

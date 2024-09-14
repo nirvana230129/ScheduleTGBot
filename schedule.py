@@ -21,6 +21,29 @@ class Schedule:
         self._odd_week: list[ScheduleEvent] = []
         self._distribute_by_week()
 
+    def _read_ics(self, file_path: str):
+        with open(file_path, encoding='utf-8') as file:
+            calendar = Calendar.from_ical(file.read())
+            for component in calendar.walk('VEVENT'):
+                teachers = []
+                teacher_names = component.get('description').replace('Б22-505', '').replace('\xa0', ' ')[:-1]
+                if teacher_names:
+                    for teacher_name in teacher_names.split(', '):
+                        teacher = self.get_teacher(teacher_name)
+                        if teacher is None:
+                            teacher = Teacher(teacher_name)
+                            self._all_teachers.append(teacher)
+                        teachers.append(teacher)
+
+                self._all_events.append(ScheduleEvent(
+                    component.get('summary'),
+                    component.get('dtstart').dt.time(),
+                    component.get('dtend').dt.time(),
+                    component.get('dtstart').dt.date(),
+                    teachers=teachers,
+                    location=component.get('location'),
+                    frequency_of_weeks=1 + int('INTERVAL' in component.get('rrule'))))
+
     def _read_txt(self, file_path: str):
         with (open(file_path, encoding='utf-8') as file):
             for component in eval(file.read()):
