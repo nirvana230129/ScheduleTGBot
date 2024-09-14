@@ -29,11 +29,12 @@ class Schedule:
                 teacher_names = component.get('description').replace('Б22-505', '').replace('\xa0', ' ')[:-1]
                 if teacher_names:
                     for teacher_name in teacher_names.split(', '):
-                        teacher = self.get_teacher(teacher_name)
+                        teacher = self.get_teacher(teacher_name.split()[0])
                         if teacher is None:
                             teacher = Teacher(teacher_name)
                             self._all_teachers.append(teacher)
                         teachers.append(teacher)
+                        teacher.add_subject(component.get('summary'))
 
                 self._all_events.append(ScheduleEvent(
                     component.get('summary'),
@@ -49,11 +50,13 @@ class Schedule:
             for component in eval(file.read()):
                 teachers = []
                 for teacher_name in component['teachers']:
-                    teacher = self.get_teacher(teacher_name)
+                    teacher = self.get_teacher(teacher_name.split()[0])
                     if teacher is None:
                         teacher = Teacher(teacher_name)
                         self._all_teachers.append(teacher)
                     teachers.append(teacher)
+                    teacher.add_subject(component['subject'], component['format'])
+
                 start_dt = datetime(*component['start_dt'])
                 self._all_events.append(ScheduleEvent(
                     component['subject'],

@@ -6,7 +6,7 @@ class Teacher:
         self.name: str | None = None
         self.photo: str | None = None
         self.link: str | None = None
-        self.subjects: list[str] | None = None
+        self.subjects: list[str] = []
 
         surname = split_name(name.strip())[0]
         with open(db_file) as file:
@@ -23,8 +23,15 @@ class Teacher:
                     return
         self.name = name.strip()
 
+    def add_subject(self, subject: str, format: str = None):
+        new_subject = ('' if format is None else f'[{format}] ') + subject
+        if new_subject not in self.subjects:
+            self.subjects.append(new_subject)
+        self.subjects.sort()
+
     def __str__(self):
-        return f'name: {self.name}\nphoto: {self.photo}\nlink: {self.link}'
+        return (f'name: {self.name}\nphoto: {self.photo}\nlink: {self.link}\nsubjects:\n  ' +
+                '\n  '.join(self.subjects) + '\n')
 
     def __repr__(self):
         return self.name
