@@ -1,4 +1,4 @@
-from icalendar import Calendar, Event
+from icalendar import Calendar
 from datetime import datetime, date, timedelta
 
 from teacher import Teacher
@@ -34,10 +34,10 @@ class Schedule:
                 start_dt = datetime(*component['start_dt'])
                 self._all_events.append(ScheduleEvent(
                     component['subject'],
-                    component['format'],
                     start_dt.time(),
                     datetime(*component['end_dt']).time(),
                     start_dt.date(),
+                    component['format'],
                     teachers,
                     component['location'],
                     component['frequency_of_weeks']))
