@@ -113,20 +113,6 @@ class Schedule:
             return [event for event in self._odd_week if (event.start_date - given_date).days % 7 == 0]
         return [event for event in self._even_week if (event.start_date - given_date).days % 7 == 0]
 
-    def get_schedule_for_today(self) -> list[ScheduleEvent]:
-        """
-        Makes a list of events for today.
-        :return: list of events
-        """
-        return self.get_schedule_by_date(datetime.today().date())
-
-    def get_schedule_for_tomorrow(self) -> list[ScheduleEvent]:
-        """
-        Makes a list of events for tomorrow.
-        :return: list of events
-        """
-        return self.get_schedule_by_date(datetime.today().date() + timedelta(days=1))
-
     def get_teacher(self, name: str) -> Teacher | None:
         """
         Finds the teacher by the prefix of the name.
