@@ -2,6 +2,7 @@ from aiogram import types, Router, F
 from aiogram.filters import CommandStart
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
+from aiogram.types import FSInputFile
 
 from datetime import datetime, timedelta
 
@@ -55,3 +56,26 @@ async def register_date(message: types.Message, state: FSMContext):
     await message.answer(intro + (''.join(str(event) for event in schedule.get_schedule_by_date(date)) or "Пар нет!"))
 
     await state.clear()
+
+@router.message(F.text.lower().strip().in_(['найти преподавателя']))
+async def search_for_teacher(message: types.Message, state: FSMContext):
+    await state.set_state(Register.teacher_name)
+    await message.answer(text='Введите префикс ФИО преподавателя')
+
+
+@router.message(Register.teacher_name)
+async def register_teacher_name(message: types.Message, state: FSMContext):
+    await state.update_data(teacher_name=message.text)
+    data = await state.get_data()
+    teacher_name = data['teacher_name']
+    await state.clear()
+
+    teacher = schedule.get_teacher(teacher_name)
+    if teacher is None:
+        await message.answer(f'Преподаватель "{teacher_name}" не найден')
+    else:
+        if teacher.photo is not None:
+            photo = FSInputFile(teacher.photo)
+            await message.answer_photo(photo, caption=str(teacher))
+        else:
+            await message.answer(text=str(teacher))

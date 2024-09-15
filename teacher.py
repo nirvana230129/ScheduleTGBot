@@ -41,11 +41,11 @@ class Teacher:
         self.subjects.sort()
 
     def __str__(self):
-        return (f'name: {self.name}\nphoto: {self.photo}\nlink: {self.link}\nsubjects:\n  ' +
-                '\n  '.join(self.subjects) + '\n')
+        return f'{self.name}\nlink: {self.link}\nПредметы:\n  ' + '\n  '.join(self.subjects) + '\n'
 
     def __repr__(self):
-        return self.name
+        return (f'name: {self.name}\nphoto: {self.photo}\nlink: {self.link}\nsubjects:\n  ' +
+                '\n  '.join(self.subjects) + '\n')
 
 
 def split_name(name: str) -> list[str]:
