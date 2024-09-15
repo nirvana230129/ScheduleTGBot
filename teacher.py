@@ -3,6 +3,12 @@ import os
 
 class Teacher:
     def __init__(self, name: str, db_file='data/teachers.txt', photos_dir='data/photos/', extension='.jpg'):
+        """
+        :param name: full name (option with initials like 'Ivanov A.A.' is possible) of teacher
+        :param db_file: file path to data about full names and links
+        :param photos_dir: directory of photos
+        :param extension: photos extension
+        """
         self.name: str | None = None
         self.photo: str | None = None
         self.link: str | None = None
@@ -24,6 +30,11 @@ class Teacher:
         self.name = name.strip()
 
     def add_subject(self, subject: str, format: str = None):
+        """
+        Adds subject to teacher.
+        :param subject: name of subject
+        :param format: lecture, laboratory or other
+        """
         new_subject = ('' if format is None else f'[{format}] ') + subject
         if new_subject not in self.subjects:
             self.subjects.append(new_subject)
@@ -38,6 +49,11 @@ class Teacher:
 
 
 def split_name(name: str) -> list[str]:
+    """
+    Splits name into parts (name, surname, etc.).
+    :param name: full name of teacher
+    :return: list of name parts
+    """
     for l in [l for l in name.lower() if not l.isalpha()]:
         name = name.replace(l, ' ')
     while '  ' in name:

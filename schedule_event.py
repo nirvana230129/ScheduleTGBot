@@ -6,6 +6,16 @@ class ScheduleEvent:
     def __init__(self, subject: str, start_time: time, end_time: time,
                  start_date: date, format: str = None, teachers: list[Teacher | str] = None, location: str = None,
                  frequency_of_weeks: int = 1):
+        """
+        :param subject: name of subject
+        :param start_time: start time of event
+        :param end_time: end time of event
+        :param start_date: date of start event
+        :param format: lecture, laboratory or other
+        :param teachers: list of teachers
+        :param location: location of event
+        :param frequency_of_weeks: in how many weeks the event will repeat
+        """
         self.subject = subject
         self.start_time = start_time
         self.end_time = end_time
